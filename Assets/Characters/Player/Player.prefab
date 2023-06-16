@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9043369245924533399}
   - component: {fileID: 9179255766923967169}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Weapon-Sword
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -94,7 +94,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9043535360598789637}
   - component: {fileID: 9179760336199671531}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Leg
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -177,7 +177,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9051870712318928931}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Weapon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -210,7 +210,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9052123822741834661}
   - component: {fileID: 9179105916099825461}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Head
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -301,7 +301,7 @@ GameObject:
   - component: {fileID: 2641560919064192407}
   - component: {fileID: 5476082666764528260}
   - component: {fileID: 8119766061064945756}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -407,7 +407,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -465,7 +465,19 @@ MonoBehaviour:
     m_ActionId: 633542ca-74e7-4559-8940-add8535bbeda
     m_ActionName: Player/Look[/Mouse/delta]
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2641560919064192407}
+        m_TargetAssemblyTypeName: PlayerControl, Assembly-CSharp
+        m_MethodName: OnAttack
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: 82710393-49d3-4e98-9fdf-03f79ff7117a
     m_ActionName: Player/Attack[/Mouse/leftButton]
   - m_PersistentCalls:
@@ -571,7 +583,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d94258ca0623e3840b4d85ed6e26af21, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _castFilter:
+    useTriggers: 0
+    useLayerMask: 1
+    useDepth: 0
+    useOutsideDepth: 0
+    useNormalAngle: 0
+    useOutsideNormalAngle: 0
+    layerMask:
+      serializedVersion: 2
+      m_Bits: 64
+    minDepth: 0
+    maxDepth: 0
+    minNormalAngle: 0
+    maxNormalAngle: 0
   groundDistance: 0.05
+  wallDistance: 0.5
+  ceilingDistance: 0.05
+  _isGrounded: 1
+  _isOnWall: 0
 --- !u!1 &9049341510330799709
 GameObject:
   m_ObjectHideFlags: 0
@@ -582,7 +612,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9043384851677823477}
   - component: {fileID: 9179844608483359287}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -668,7 +698,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9051836513833956463}
   - component: {fileID: 9179767980170976055}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Leg (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -752,7 +782,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9051700577689256899}
   - component: {fileID: 9178446944980804871}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Hat-Helmet
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -5,7 +5,7 @@ using UnityEngine;
 public class TouchingDirections : MonoBehaviour
 {
     private CapsuleCollider2D _touchingCol;
-    private ContactFilter2D _castFilter;
+    public ContactFilter2D _castFilter;
     private Animator _animator;
 
     public float groundDistance = 0.05f;
@@ -19,7 +19,7 @@ public class TouchingDirections : MonoBehaviour
 
     public bool _isGrounded = true;
     public bool _isOnWall;
-    public bool _isOnCeiling;
+    //public bool _isOnCeiling;
 
     private Vector2 wallCheckDirection => gameObject.transform.localScale.x > 0 ? Vector2.right : Vector2.left;
 
@@ -38,15 +38,15 @@ public class TouchingDirections : MonoBehaviour
             _animator.SetBool(AnimationStrings.isOnWall, value);
         }
     }
-    public bool IsOnCeiling
-    {
-        get { return _isOnCeiling; }
-        private set
-        {
-            _isOnCeiling = value;
-            _animator.SetBool(AnimationStrings.isOnCeiling, value);
-        }
-    }
+    //public bool IsOnCeiling
+    //{
+    //    get { return _isOnCeiling; }
+    //    private set
+    //    {
+    //        _isOnCeiling = value;
+    //        _animator.SetBool(AnimationStrings.isOnCeiling, value);
+    //    }
+    //}
 
     private void Awake()
     {
@@ -58,7 +58,7 @@ public class TouchingDirections : MonoBehaviour
     {
         IsGrounded = _touchingCol.Cast(Vector2.down, _castFilter, _groundHits, groundDistance) > 0;
         IsOnWall = _touchingCol.Cast(wallCheckDirection, _castFilter, _wallHits, wallDistance) > 0;
-        IsOnCeiling = _touchingCol.Cast(Vector2.up, _castFilter, _ceilingHits, ceilingDistance) > 0;
+        //IsOnCeiling = _touchingCol.Cast(Vector2.up, _castFilter, _ceilingHits, ceilingDistance) > 0;
     }
 
 }

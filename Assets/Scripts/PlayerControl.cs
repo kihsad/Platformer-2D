@@ -74,8 +74,15 @@ public class PlayerControl : MonoBehaviour
     {
         if(context.started && _touchingDirections.IsGrounded)
         {
-            _animator.SetTrigger(AnimationStrings.jump);
+            _animator.SetTrigger(AnimationStrings.jumpTrigger);
             _rb.velocity = new Vector2(_rb.velocity.x, jumpImpulse);
+        }
+    }
+    public void OnAttack(InputAction.CallbackContext contex)
+    {
+        if(contex.started)
+        {
+            _animator.SetTrigger(AnimationStrings.attackTrigger);
         }
     }
 }
