@@ -7,8 +7,11 @@ using UnityEngine;
 public class Bunny : MonoBehaviour
 {
     public float walkSpeed = 3f;
+    private float walkStopRate = 0.02f;
     private Rigidbody2D _rb;
     private TouchingDirections _touchingDirections;
+    public DetectionZone _attackZone;
+    private Animator _animator;
     public enum WalkableDirection { Right, Left}
 
     private WalkableDirection _walkDirection;
@@ -33,10 +36,33 @@ public class Bunny : MonoBehaviour
             _walkDirection = value; }
     }
 
+    public bool _hasTarget = false;
+
+    public bool HasTarget { get { return _hasTarget; }
+        private set
+        {
+            _hasTarget = value;
+            _animator.SetBool(AnimationStrings.hasTarget, value);
+        }
+    }
+
+    public bool CanMove
+    {
+        get
+        {
+            return _animator.GetBool(AnimationStrings.canMove);
+        }
+    }
     private void Awake()
     {
         _rb = GetComponent<Rigidbody2D>();
         _touchingDirections = GetComponent<TouchingDirections>();
+        _animator = GetComponent<Animator>();
+    }
+
+    private void Update()
+    {
+        HasTarget = _attackZone._detectedColliders.Count > 0;
     }
 
     private void FixedUpdate()
@@ -45,7 +71,10 @@ public class Bunny : MonoBehaviour
         {
             FlipDirection();
         }
-        _rb.velocity = new Vector2(walkSpeed * _walkDirectionVector.x, _rb.velocity.y);
+        if (CanMove)
+            _rb.velocity = new Vector2(walkSpeed * _walkDirectionVector.x, _rb.velocity.y);
+        else
+            _rb.velocity = new Vector2(Mathf.Lerp(_rb.velocity.x, 0, walkStopRate), _rb.velocity.y);
     }
 
     private void FlipDirection()
@@ -54,13 +83,10 @@ public class Bunny : MonoBehaviour
         {
             WalkDirection = WalkableDirection.Left;
         }
-        else /*if(WalkDirection == WalkableDirection.Left)*/
+        else
         {
             WalkDirection = WalkableDirection.Right;
         }
-        //else
-        //{
-        //    Debug.LogError("Ќе определено движение вправо или влево");
-        //}
     }
+
 }
