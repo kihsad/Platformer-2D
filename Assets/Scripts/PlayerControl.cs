@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-[RequireComponent(typeof(Rigidbody2D), typeof(TouchingDirections))]
+[RequireComponent(typeof(Rigidbody2D), typeof(TouchingDirections), typeof(Damageable))]
 public class PlayerControl : MonoBehaviour
 {
     public float walkSpeed = 5f;
@@ -12,6 +12,7 @@ public class PlayerControl : MonoBehaviour
     public float jumpImpulse = 5f;
     private bool _isMoving = false;
     private TouchingDirections _touchingDirections;
+    private Damageable _damageable;
 
     public bool IsMoving { get 
         {
@@ -42,12 +43,14 @@ public class PlayerControl : MonoBehaviour
         _rb = GetComponent<Rigidbody2D>();
         _animator = GetComponent<Animator>();
         _touchingDirections = GetComponent<TouchingDirections>();
+        _damageable = GetComponent<Damageable>();
     }
 
     private void FixedUpdate()
     {
-        //TODO 
+        //TODO  
         //if (!_touchingDirections.IsOnWall)
+        //if(!_damageable.IsHit)
         _rb.velocity = new Vector2(_moveInput.x * walkSpeed, _rb.velocity.y);
     }
 

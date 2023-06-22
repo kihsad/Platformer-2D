@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody2D), typeof(TouchingDirections))]
+[RequireComponent(typeof(Rigidbody2D), typeof(TouchingDirections), typeof(Damageable))]
 public class Bunny : MonoBehaviour
 {
     public float walkSpeed = 3f;
@@ -12,6 +12,7 @@ public class Bunny : MonoBehaviour
     private TouchingDirections _touchingDirections;
     public DetectionZone _attackZone;
     private Animator _animator;
+    private Damageable _damageable;
     public enum WalkableDirection { Right, Left}
 
     private WalkableDirection _walkDirection;
@@ -58,6 +59,7 @@ public class Bunny : MonoBehaviour
         _rb = GetComponent<Rigidbody2D>();
         _touchingDirections = GetComponent<TouchingDirections>();
         _animator = GetComponent<Animator>();
+        _damageable = GetComponent<Damageable>();
     }
 
     private void Update()
@@ -71,10 +73,14 @@ public class Bunny : MonoBehaviour
         {
             FlipDirection();
         }
+        if (!_damageable.IsHit)
+        {
         if (CanMove)
             _rb.velocity = new Vector2(walkSpeed * _walkDirectionVector.x, _rb.velocity.y);
         else
             _rb.velocity = new Vector2(Mathf.Lerp(_rb.velocity.x, 0, walkStopRate), _rb.velocity.y);
+
+        }
     }
 
     private void FlipDirection()
@@ -88,5 +94,4 @@ public class Bunny : MonoBehaviour
             WalkDirection = WalkableDirection.Right;
         }
     }
-
 }

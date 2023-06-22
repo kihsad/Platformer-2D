@@ -6,6 +6,7 @@ public class Damageable : MonoBehaviour
 {
     private Animator _animator;
 
+
     [SerializeField]
     private int _maxHealth = 100;
     public int MaxHealth
@@ -41,6 +42,19 @@ public class Damageable : MonoBehaviour
     private bool _isAlive = true;
     [SerializeField]
     private bool isInvincible = false;
+
+    public bool IsHit
+    {
+        get
+        {
+            return _animator.GetBool(AnimationStrings.isHit);
+        }
+        private set
+        {
+            _animator.SetBool(AnimationStrings.isHit, value);
+        }
+    }
+
     private float timeSinceHit = 0;
     private float invincibilityTime = 0.25f;
 
@@ -59,6 +73,7 @@ public class Damageable : MonoBehaviour
     }
     private void Awake()
     {
+        
         _animator = GetComponent<Animator>();
     }
 
@@ -81,6 +96,8 @@ public class Damageable : MonoBehaviour
         {
             Health -= damage;
             isInvincible = true;
+            //IsHit = true;
+            _animator.SetTrigger(AnimationStrings.hitTrigger);
         }
     }
 }
