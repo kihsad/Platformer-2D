@@ -101,4 +101,13 @@ public class Damageable : MonoBehaviour
             CharacterEvents.characterDamaged.Invoke(gameObject, damage);
         }
     }
+
+    public void Heal(int healthRestore)
+    {
+        if(IsAlive)
+        {
+            Health += healthRestore;
+            CharacterEvents.characterHealed(gameObject, healthRestore);
+        }
+    }
 }
