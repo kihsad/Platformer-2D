@@ -98,6 +98,7 @@ public class Damageable : MonoBehaviour
             isInvincible = true;
             //IsHit = true;
             _animator.SetTrigger(AnimationStrings.hitTrigger);
+            CharacterEvents.characterDamaged.Invoke(gameObject, damage);
         }
     }
 }
