@@ -13,6 +13,9 @@ public class PlayerControl : MonoBehaviour
     private bool _isMoving = false;
     private TouchingDirections _touchingDirections;
     private Damageable _damageable;
+    private int _currentJumps;
+    private int maxJumps = 2;
+    private float doublejumpImpulse = 3f;
 
     public bool IsMoving { get 
         {
@@ -44,6 +47,7 @@ public class PlayerControl : MonoBehaviour
         _animator = GetComponent<Animator>();
         _touchingDirections = GetComponent<TouchingDirections>();
         _damageable = GetComponent<Damageable>();
+        _currentJumps = 1;
     }
 
     private void FixedUpdate()
@@ -75,11 +79,25 @@ public class PlayerControl : MonoBehaviour
 
     public void OnJump(InputAction.CallbackContext context)
     {
-        if(context.started && _touchingDirections.IsGrounded)
+        if (context.performed && _touchingDirections.IsGrounded)
         {
             _animator.SetTrigger(AnimationStrings.jumpTrigger);
             _rb.velocity = new Vector2(_rb.velocity.x, jumpImpulse);
+            _currentJumps++;
+            Debug.Log("1");
         }
+        else if (context.performed && _currentJumps < maxJumps)
+        {
+            _animator.SetTrigger(AnimationStrings.jumpTrigger);
+            _rb.velocity = new Vector2(_rb.velocity.x, jumpImpulse + doublejumpImpulse);
+            _currentJumps++;
+            Debug.Log("2");
+        }
+        //Debug.Log(_currentJumps);
+
+        if (_touchingDirections.IsGrounded) _currentJumps = 1;
+        if (_currentJumps >= maxJumps) return;
+        
     }
     public void OnAttack(InputAction.CallbackContext contex)
     {
