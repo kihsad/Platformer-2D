@@ -8,14 +8,17 @@ using UnityEngine.InputSystem;
 public class PlayerControl : MonoBehaviour
 {
     public float walkSpeed = 5f;
+    public GameObject projectilePrefab;
+
     Vector2 _moveInput;
-    public float jumpImpulse = 5f;
+    public float jumpImpulse = 6f;
     private bool _isMoving = false;
     private TouchingDirections _touchingDirections;
     private Damageable _damageable;
     private int _currentJumps;
     private int maxJumps = 2;
-    private float doublejumpImpulse = 3f;
+    private float doublejumpImpulse = 4f;
+    private ProjectileLauncher _projectileLauncher;
 
     public bool IsMoving { get 
         {
@@ -48,6 +51,7 @@ public class PlayerControl : MonoBehaviour
         _touchingDirections = GetComponent<TouchingDirections>();
         _damageable = GetComponent<Damageable>();
         _currentJumps = 1;
+        _projectileLauncher = GetComponent<ProjectileLauncher>();
     }
 
     private void FixedUpdate()
@@ -104,6 +108,22 @@ public class PlayerControl : MonoBehaviour
         if(contex.started)
         {
             _animator.SetTrigger(AnimationStrings.attackTrigger);
+        }
+    }
+
+    public void OnRangedAttack(InputAction.CallbackContext contex)
+    {
+        if (contex.started)
+        {
+            //_projectileLauncher.FireProjectile();
+            GameObject projectile = Instantiate(projectilePrefab, transform.position, projectilePrefab.transform.rotation);
+            Vector3 origScale = projectile.transform.localScale;
+            projectile.transform.localScale = new Vector3(
+                origScale.x * transform.localScale.x > 0 ? -1 : 1,
+                origScale.y,
+                origScale.z
+                );
+            //_animator.SetTrigger(AnimationStrings.rangedAttackTrigger);
         }
     }
 }
