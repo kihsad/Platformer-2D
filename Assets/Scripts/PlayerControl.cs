@@ -11,7 +11,7 @@ public class PlayerControl : MonoBehaviour
     public GameObject projectilePrefab;
 
     Vector2 _moveInput;
-    public float jumpImpulse = 6f;
+    public float jumpImpulse = 8f;
     private bool _isMoving = false;
     private TouchingDirections _touchingDirections;
     private Damageable _damageable;
