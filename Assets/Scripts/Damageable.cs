@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class Damageable : MonoBehaviour
 {
+    private PlayerControl _control;
     private Animator _animator;
-
+    public int _enemyXp;
 
     [SerializeField]
     private int _maxHealth = 100;
@@ -35,6 +36,7 @@ public class Damageable : MonoBehaviour
             if(_health <= 0)
             {
                 IsAlive = false;
+                _control.GainXP(_enemyXp);
             }
         }
     }
@@ -73,7 +75,7 @@ public class Damageable : MonoBehaviour
     }
     private void Awake()
     {
-        
+        _control = FindObjectOfType<PlayerControl>();
         _animator = GetComponent<Animator>();
     }
 

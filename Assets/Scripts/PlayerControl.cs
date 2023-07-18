@@ -125,8 +125,6 @@ public class PlayerControl : MonoBehaviour
         _moveInput = context.ReadValue<Vector2>();
         IsMoving = _moveInput != Vector2.zero;
         SetFacingDirection(_moveInput);
-        GainXP(10);
-        Debug.Log("gain");
     }
 
     private void SetFacingDirection(Vector2 moveInput)
