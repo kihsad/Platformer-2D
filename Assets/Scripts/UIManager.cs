@@ -42,4 +42,5 @@ public class UIManager : MonoBehaviour
             .GetComponent<TMP_Text>();
         tmpText.text = healthRestored.ToString();
     }
+
 }
