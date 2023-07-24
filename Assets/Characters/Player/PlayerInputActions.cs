@@ -71,6 +71,33 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""StrongAttack"",
+                    ""type"": ""Button"",
+                    ""id"": ""ca8efe8c-ab18-4b33-8504-27d2bc49698f"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Block"",
+                    ""type"": ""Button"",
+                    ""id"": ""d1112045-70ef-41de-bcc9-e78d12ee13b0"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Transformation"",
+                    ""type"": ""Button"",
+                    ""id"": ""33d3cad3-c3d1-474a-88a3-86645814c417"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -313,6 +340,39 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""RangedAttack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e7e12832-0288-4210-b5a5-76ca4f98a806"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""StrongAttack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6cac2c59-07c2-4f70-a388-29335c0fc61b"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Block"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""97867e50-b783-459a-82bd-6d6244dbe787"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Transformation"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -905,6 +965,9 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         m_Player_Attack = m_Player.FindAction("Attack", throwIfNotFound: true);
         m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
         m_Player_RangedAttack = m_Player.FindAction("RangedAttack", throwIfNotFound: true);
+        m_Player_StrongAttack = m_Player.FindAction("StrongAttack", throwIfNotFound: true);
+        m_Player_Block = m_Player.FindAction("Block", throwIfNotFound: true);
+        m_Player_Transformation = m_Player.FindAction("Transformation", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -981,6 +1044,9 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Attack;
     private readonly InputAction m_Player_Jump;
     private readonly InputAction m_Player_RangedAttack;
+    private readonly InputAction m_Player_StrongAttack;
+    private readonly InputAction m_Player_Block;
+    private readonly InputAction m_Player_Transformation;
     public struct PlayerActions
     {
         private @PlayerInputActions m_Wrapper;
@@ -990,6 +1056,9 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         public InputAction @Attack => m_Wrapper.m_Player_Attack;
         public InputAction @Jump => m_Wrapper.m_Player_Jump;
         public InputAction @RangedAttack => m_Wrapper.m_Player_RangedAttack;
+        public InputAction @StrongAttack => m_Wrapper.m_Player_StrongAttack;
+        public InputAction @Block => m_Wrapper.m_Player_Block;
+        public InputAction @Transformation => m_Wrapper.m_Player_Transformation;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1014,6 +1083,15 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                 @RangedAttack.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRangedAttack;
                 @RangedAttack.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRangedAttack;
                 @RangedAttack.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRangedAttack;
+                @StrongAttack.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnStrongAttack;
+                @StrongAttack.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnStrongAttack;
+                @StrongAttack.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnStrongAttack;
+                @Block.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnBlock;
+                @Block.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnBlock;
+                @Block.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnBlock;
+                @Transformation.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnTransformation;
+                @Transformation.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnTransformation;
+                @Transformation.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnTransformation;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -1033,6 +1111,15 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                 @RangedAttack.started += instance.OnRangedAttack;
                 @RangedAttack.performed += instance.OnRangedAttack;
                 @RangedAttack.canceled += instance.OnRangedAttack;
+                @StrongAttack.started += instance.OnStrongAttack;
+                @StrongAttack.performed += instance.OnStrongAttack;
+                @StrongAttack.canceled += instance.OnStrongAttack;
+                @Block.started += instance.OnBlock;
+                @Block.performed += instance.OnBlock;
+                @Block.canceled += instance.OnBlock;
+                @Transformation.started += instance.OnTransformation;
+                @Transformation.performed += instance.OnTransformation;
+                @Transformation.canceled += instance.OnTransformation;
             }
         }
     }
@@ -1194,6 +1281,9 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         void OnAttack(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
         void OnRangedAttack(InputAction.CallbackContext context);
+        void OnStrongAttack(InputAction.CallbackContext context);
+        void OnBlock(InputAction.CallbackContext context);
+        void OnTransformation(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

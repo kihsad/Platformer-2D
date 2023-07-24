@@ -1,7 +1,4 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -23,7 +20,7 @@ public class PlayerControl : MonoBehaviour
     public float walkSpeed = 5f;
     public GameObject projectilePrefab;
 
-    Vector2 _moveInput;
+    private Vector2 _moveInput;
     public float jumpImpulse = 8f;
     private bool _isMoving = false;
     private TouchingDirections _touchingDirections;
@@ -33,6 +30,22 @@ public class PlayerControl : MonoBehaviour
     private float doublejumpImpulse = 4f;
     private ProjectileLauncher _projectileLauncher;
 
+    [SerializeField]
+    private int _dashForce;
+    public bool IsRobotActionActive { get; set; }
+
+    private static PlayerControl instance;
+    public static PlayerControl Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                instance = FindObjectOfType<PlayerControl>();
+            }
+            return instance;
+        }
+    }
     public bool IsMoving
     {
         get
@@ -72,6 +85,7 @@ public class PlayerControl : MonoBehaviour
 
     Rigidbody2D _rb;
     Animator _animator;
+    private Attack _attack;
     private bool _isFacingRight = true;
 
     private void Awake()
@@ -82,17 +96,14 @@ public class PlayerControl : MonoBehaviour
         _damageable = GetComponent<Damageable>();
         _currentJumps = 1;
         _projectileLauncher = GetComponent<ProjectileLauncher>();
-        //_xp.Initialized(_xpValue, _maxXp);
         _xp.Initialized(0, Mathf.Floor(100 * MyLevel * Mathf.Pow(MyLevel, 0.5f)));
         _levelText.text = MyLevel.ToString();
+        _attack = GetComponent<Attack>();
 
     }
 
     private void FixedUpdate()
     {
-        //TODO  
-        //if (!_touchingDirections.IsOnWall)
-        //if(!_damageable.IsHit)
         _rb.velocity = new Vector2(_moveInput.x * walkSpeed, _rb.velocity.y);
     }
 
@@ -127,13 +138,13 @@ public class PlayerControl : MonoBehaviour
         SetFacingDirection(_moveInput);
     }
 
-    private void SetFacingDirection(Vector2 moveInput)
+    public void SetFacingDirection(Vector2 moveInput)
     {
-        if (_moveInput.x > 0 && !IsFacingRight)
+        if (this._moveInput.x > 0 && !IsFacingRight)
         {
             IsFacingRight = true;
         }
-        else if (_moveInput.x < 0 && IsFacingRight)
+        else if (this._moveInput.x < 0 && IsFacingRight)
         {
             IsFacingRight = false;
         }
@@ -146,16 +157,13 @@ public class PlayerControl : MonoBehaviour
             _animator.SetTrigger(AnimationStrings.jumpTrigger);
             _rb.velocity = new Vector2(_rb.velocity.x, jumpImpulse);
             _currentJumps++;
-            Debug.Log("1");
         }
         else if (context.performed && _currentJumps < maxJumps)
         {
             _animator.SetTrigger(AnimationStrings.jumpTrigger);
             _rb.velocity = new Vector2(_rb.velocity.x, jumpImpulse + doublejumpImpulse);
             _currentJumps++;
-            Debug.Log("2");
         }
-        //Debug.Log(_currentJumps);
 
         if (_touchingDirections.IsGrounded) _currentJumps = 1;
         if (_currentJumps >= maxJumps) return;
@@ -173,7 +181,6 @@ public class PlayerControl : MonoBehaviour
     {
         if (contex.started)
         {
-            //_projectileLauncher.FireProjectile();
             GameObject projectile = Instantiate(projectilePrefab, transform.position, projectilePrefab.transform.rotation);
             Vector3 origScale = projectile.transform.localScale;
             projectile.transform.localScale = new Vector3(
@@ -181,7 +188,33 @@ public class PlayerControl : MonoBehaviour
                 origScale.y,
                 origScale.z
                 );
-            //_animator.SetTrigger(AnimationStrings.rangedAttackTrigger);
+        }
+    }
+
+    public void OnStrongAttack(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            _attack.attackDamage = _attack.attackDamage * 2;
+        }
+    }
+
+    public void OnDash()
+    {
+        if (IsFacingRight)
+        {
+            _rb.AddForce(Vector2.right * _dashForce);
+        }
+        else
+        {
+            _rb.AddForce(Vector2.left * _dashForce);
+        }
+    }
+    public void OnChangeSkin(InputAction.CallbackContext context)
+    {
+        if (context.started && IsRobotActionActive)
+        {
+            Transformation.Instance.ChangeSkin();
         }
     }
 }
