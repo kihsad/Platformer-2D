@@ -30,9 +30,7 @@ public class PlayerControl : MonoBehaviour
     private float doublejumpImpulse = 4f;
     private ProjectileLauncher _projectileLauncher;
 
-    [SerializeField]
-    private int _dashForce;
-    public bool IsRobotActionActive { get; set; }
+    public int dashForce;
 
     private static PlayerControl instance;
     public static PlayerControl Instance
@@ -87,6 +85,8 @@ public class PlayerControl : MonoBehaviour
     Animator _animator;
     private Attack _attack;
     private bool _isFacingRight = true;
+    private Block _block;
+    private Transformation _transformation;
 
     private void Awake()
     {
@@ -99,7 +99,8 @@ public class PlayerControl : MonoBehaviour
         _xp.Initialized(0, Mathf.Floor(100 * MyLevel * Mathf.Pow(MyLevel, 0.5f)));
         _levelText.text = MyLevel.ToString();
         _attack = GetComponent<Attack>();
-
+        _block = GetComponent<Block>();
+        _transformation = GetComponent<Transformation>();
     }
 
     private void FixedUpdate()
@@ -111,7 +112,7 @@ public class PlayerControl : MonoBehaviour
     {
         _xp.MyCurrentValue += xp;
 
-        if(_xp.MyCurrentValue >= _xp.MyMaxValue)
+        if (_xp.MyCurrentValue >= _xp.MyMaxValue)
         {
             StartCoroutine(Ding());
         }
@@ -119,7 +120,7 @@ public class PlayerControl : MonoBehaviour
 
     private IEnumerator Ding()
     {
-        while(!_xp.IsFull)
+        while (!_xp.IsFull)
         {
             yield return null;
         }
@@ -192,29 +193,43 @@ public class PlayerControl : MonoBehaviour
     }
 
     public void OnStrongAttack(InputAction.CallbackContext context)
-    {
+    {   
         if (context.started)
         {
-            _attack.attackDamage = _attack.attackDamage * 2;
+            _animator.SetTrigger(AnimationStrings.attackTrigger);
+            _attack.attackDamage *= 2;
         }
+
     }
 
-    public void OnDash()
+    public void OnDash(InputAction.CallbackContext context)
     {
-        if (IsFacingRight)
+        if (context.started && !_touchingDirections.IsGrounded)
         {
-            _rb.AddForce(Vector2.right * _dashForce);
-        }
-        else
-        {
-            _rb.AddForce(Vector2.left * _dashForce);
+            if (IsFacingRight)
+            {
+                _rb.AddForce(Vector2.right * dashForce);
+            }
+            else
+            {
+                _rb.AddForce(Vector2.left * dashForce);
+            }
+
         }
     }
     public void OnChangeSkin(InputAction.CallbackContext context)
     {
-        if (context.started && IsRobotActionActive)
+        if (context.started)
         {
-            Transformation.Instance.ChangeSkin();
+            _transformation.ChangeSkin();
+        }
+    }
+
+    public void OnBlock(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            _block.SetActiveShield(_damageable);
         }
     }
 }

@@ -4,21 +4,20 @@ using UnityEngine;
 public class Block : MonoBehaviour
 {
     [SerializeField]
-    private SpriteRenderer _shiled;
+    private SpriteRenderer _shield;
     [SerializeField]
     private float _shieldTime;
 
     public bool isActive;
 
-    public bool IsShieldActionActive { get; set; }
+    //public bool IsShieldActionActive { get; set; }
 
     private void Awake()
     {
-        _shiled.enabled = false;
+        _shield.enabled = false;
     }
-    public void SetActiveShield()
+    public void SetActiveShield(Damageable damageable)
     {
-        if (!IsShieldActionActive) return;
         if (!isActive)
         {
             StartCoroutine(Shield());
@@ -28,9 +27,9 @@ public class Block : MonoBehaviour
     private IEnumerator Shield()
     {
         isActive = true;
-        _shiled.enabled = true;
+        _shield.enabled = true;
         yield return new WaitForSeconds(_shieldTime);
-        _shiled.enabled = false;
+        _shield.enabled = false;
         isActive = false;
     }
    

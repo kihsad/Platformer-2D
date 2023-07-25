@@ -6,6 +6,7 @@ public class Damageable : MonoBehaviour
 {
     private PlayerControl _control;
     private Animator _animator;
+    private Block _block;
     public int _enemyXp;
 
     [SerializeField]
@@ -77,6 +78,7 @@ public class Damageable : MonoBehaviour
     {
         _control = FindObjectOfType<PlayerControl>();
         _animator = GetComponent<Animator>();
+        _block = GetComponent<Block>();
     }
 
     private void Update()
@@ -94,13 +96,27 @@ public class Damageable : MonoBehaviour
 
     public void Hit(int damage)
     {
-        if(IsAlive && !isInvincible)
+        if (_block == null)
         {
-            Health -= damage;
-            isInvincible = true;
-            //IsHit = true;
-            _animator.SetTrigger(AnimationStrings.hitTrigger);
-            CharacterEvents.characterDamaged.Invoke(gameObject, damage);
+            if (IsAlive && !isInvincible)
+            {
+                Health -= damage;
+                isInvincible = true;
+                //IsHit = true;
+                _animator.SetTrigger(AnimationStrings.hitTrigger);
+                CharacterEvents.characterDamaged.Invoke(gameObject, damage);
+            }
+        }
+        else if (!_block.isActive)
+        {
+            if (IsAlive && !isInvincible)
+            {
+                Health -= damage;
+                isInvincible = true;
+                //IsHit = true;
+                _animator.SetTrigger(AnimationStrings.hitTrigger);
+                CharacterEvents.characterDamaged.Invoke(gameObject, damage);
+            }
         }
     }
 
