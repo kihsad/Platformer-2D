@@ -4,7 +4,20 @@ using UnityEngine;
 
 public class Attack : MonoBehaviour
 {
-    public int attackDamage = 10;
+    [SerializeField]
+    private int attackDamage = 10;
+
+    public int Damage
+    {
+        get
+        {
+            return attackDamage;
+        }
+        set
+        {
+            attackDamage = value;
+        }
+    }
     private void OnTriggerEnter2D(Collider2D collision)
     {
         Damageable damageable = collision.GetComponent<Damageable>();

@@ -16,6 +16,8 @@ public class PlayerControl : MonoBehaviour
     private int _level;
     [SerializeField]
     private Text _levelText;
+    [SerializeField]
+    private GameObject _abilityPanel;
 
     public float walkSpeed = 5f;
     public GameObject projectilePrefab;
@@ -31,6 +33,11 @@ public class PlayerControl : MonoBehaviour
     private ProjectileLauncher _projectileLauncher;
 
     public int dashForce;
+    private int _damage;
+
+    private bool canDash;
+    private bool canUseAbilities;
+   
 
     private static PlayerControl instance;
     public static PlayerControl Instance
@@ -98,9 +105,11 @@ public class PlayerControl : MonoBehaviour
         _projectileLauncher = GetComponent<ProjectileLauncher>();
         _xp.Initialized(0, Mathf.Floor(100 * MyLevel * Mathf.Pow(MyLevel, 0.5f)));
         _levelText.text = MyLevel.ToString();
-        _attack = GetComponent<Attack>();
+        _attack = GetComponentInChildren<Attack>();
         _block = GetComponent<Block>();
         _transformation = GetComponent<Transformation>();
+        _damage = _attack.Damage;
+        _abilityPanel.SetActive(false);
     }
 
     private void FixedUpdate()
@@ -130,6 +139,11 @@ public class PlayerControl : MonoBehaviour
         _xp.MyMaxValue = Mathf.Floor(_xp.MyMaxValue);
         _xp.MyCurrentValue = _xp.MyOverFlow;
         _xp.Reset();
+        _abilityPanel.SetActive(true);
+        canUseAbilities = true;
+        yield return new WaitForSeconds(10);
+        _abilityPanel.SetActive(false);
+        canUseAbilities = false;
     }
 
     public void OnMove(InputAction.CallbackContext context)
@@ -153,6 +167,7 @@ public class PlayerControl : MonoBehaviour
 
     public void OnJump(InputAction.CallbackContext context)
     {
+        canDash = true;
         if (context.performed && _touchingDirections.IsGrounded)
         {
             _animator.SetTrigger(AnimationStrings.jumpTrigger);
@@ -168,12 +183,13 @@ public class PlayerControl : MonoBehaviour
 
         if (_touchingDirections.IsGrounded) _currentJumps = 1;
         if (_currentJumps >= maxJumps) return;
-
+        canDash = false;
     }
     public void OnAttack(InputAction.CallbackContext contex)
     {
         if (contex.started)
         {
+            _attack.Damage = _damage;
             _animator.SetTrigger(AnimationStrings.attackTrigger);
         }
     }
@@ -194,32 +210,42 @@ public class PlayerControl : MonoBehaviour
 
     public void OnStrongAttack(InputAction.CallbackContext context)
     {   
-        if (context.started)
+        if (context.started && canUseAbilities)
         {
+            _attack.Damage = _damage * 2;
             _animator.SetTrigger(AnimationStrings.attackTrigger);
-            _attack.attackDamage *= 2;
         }
-
     }
 
-    public void OnDash(InputAction.CallbackContext context)
+    public void OnDash(/*InputAction.CallbackContext context*/)
     {
-        if (context.started && !_touchingDirections.IsGrounded)
+        if (/*context.started && *//*!_touchingDirections.IsGrounded*/ canDash && canUseAbilities)
         {
+            Debug.Log("start dash");
             if (IsFacingRight)
             {
                 _rb.AddForce(Vector2.right * dashForce);
+                //float origGravity = _rb.gravityScale;
+                //_rb.gravityScale = 0f;
+                //_rb.velocity = Vector2.right * dashForce;
+                //_rb.gravityScale = origGravity;
+                Debug.Log("dash right");
             }
             else
             {
                 _rb.AddForce(Vector2.left * dashForce);
+                //float origGravity = _rb.gravityScale;
+                //_rb.gravityScale = 0f;
+                //_rb.velocity = Vector2.left * dashForce;
+                //_rb.gravityScale = origGravity;
+                Debug.Log("dash left");
             }
 
         }
     }
     public void OnChangeSkin(InputAction.CallbackContext context)
     {
-        if (context.started)
+        if (context.started && canUseAbilities)
         {
             _transformation.ChangeSkin();
         }
@@ -227,7 +253,7 @@ public class PlayerControl : MonoBehaviour
 
     public void OnBlock(InputAction.CallbackContext context)
     {
-        if (context.started)
+        if (context.started && canUseAbilities)
         {
             _block.SetActiveShield(_damageable);
         }

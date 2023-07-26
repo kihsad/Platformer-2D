@@ -681,11 +681,35 @@ MonoBehaviour:
     m_ActionId: 27ee3fe9-5abe-4d7c-a3f0-0f3922df73bc
     m_ActionName: Player/RangedAttack[/Keyboard/f]
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2641560919064192407}
+        m_TargetAssemblyTypeName: PlayerControl, Assembly-CSharp
+        m_MethodName: OnStrongAttack
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: ca8efe8c-ab18-4b33-8504-27d2bc49698f
     m_ActionName: Player/StrongAttack[/Keyboard/2]
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2641560919064192407}
+        m_TargetAssemblyTypeName: PlayerControl, Assembly-CSharp
+        m_MethodName: OnBlock
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: d1112045-70ef-41de-bcc9-e78d12ee13b0
     m_ActionName: Player/Block[/Keyboard/3]
   - m_PersistentCalls:
@@ -717,7 +741,7 @@ MonoBehaviour:
   walkSpeed: 5
   projectilePrefab: {fileID: 2786701020119531961, guid: d7f607b2f693b0f4b9cfa737d9ff1f55, type: 3}
   jumpImpulse: 6
-  _dashForce: 5
+  dashForce: 0
 --- !u!70 &5476082666764528260
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
