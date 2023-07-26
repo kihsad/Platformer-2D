@@ -19,6 +19,8 @@ public class PlayerControl : MonoBehaviour
     [SerializeField]
     private GameObject _abilityPanel;
 
+    public AudioClip movement;
+
     public float walkSpeed = 5f;
     public GameObject projectilePrefab;
 
@@ -31,8 +33,9 @@ public class PlayerControl : MonoBehaviour
     private int maxJumps = 2;
     private float doublejumpImpulse = 4f;
     private ProjectileLauncher _projectileLauncher;
+    private float _timer;
 
-    public int dashForce;
+    public float dashForce;
     private int _damage;
 
     private bool canDash;
@@ -94,6 +97,9 @@ public class PlayerControl : MonoBehaviour
     private bool _isFacingRight = true;
     private Block _block;
     private Transformation _transformation;
+    public AudioClip dingSound;
+    public AudioClip meleeAttackSound;
+    public AudioClip rangedAttackSound;
 
     private void Awake()
     {
@@ -110,11 +116,18 @@ public class PlayerControl : MonoBehaviour
         _transformation = GetComponent<Transformation>();
         _damage = _attack.Damage;
         _abilityPanel.SetActive(false);
+        _timer = 0;
     }
 
     private void FixedUpdate()
     {
         _rb.velocity = new Vector2(_moveInput.x * walkSpeed, _rb.velocity.y);
+        _timer += Time.deltaTime;
+        if (_timer >= 0.3f && _touchingDirections.IsGrounded && IsMoving)
+        {
+            SoundManager.Instance.PlaySound(movement);
+            _timer = 0;
+        }
     }
 
     public void GainXP(int xp)
@@ -139,6 +152,7 @@ public class PlayerControl : MonoBehaviour
         _xp.MyMaxValue = Mathf.Floor(_xp.MyMaxValue);
         _xp.MyCurrentValue = _xp.MyOverFlow;
         _xp.Reset();
+        SoundManager.Instance.PlaySound(dingSound);
         _abilityPanel.SetActive(true);
         canUseAbilities = true;
         yield return new WaitForSeconds(10);
@@ -151,6 +165,11 @@ public class PlayerControl : MonoBehaviour
         _moveInput = context.ReadValue<Vector2>();
         IsMoving = _moveInput != Vector2.zero;
         SetFacingDirection(_moveInput);
+        //if (_timer >= 0.2f)
+        //{
+        //    SoundManager.Instance.PlaySound(movement);
+        //    _timer = 0;
+        //}
     }
 
     public void SetFacingDirection(Vector2 moveInput)
@@ -190,6 +209,7 @@ public class PlayerControl : MonoBehaviour
         if (contex.started)
         {
             _attack.Damage = _damage;
+            SoundManager.Instance.PlaySound(meleeAttackSound);
             _animator.SetTrigger(AnimationStrings.attackTrigger);
         }
     }
@@ -198,6 +218,7 @@ public class PlayerControl : MonoBehaviour
     {
         if (contex.started)
         {
+            SoundManager.Instance.PlaySound(rangedAttackSound);
             GameObject projectile = Instantiate(projectilePrefab, transform.position, projectilePrefab.transform.rotation);
             Vector3 origScale = projectile.transform.localScale;
             projectile.transform.localScale = new Vector3(

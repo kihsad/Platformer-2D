@@ -33,7 +33,7 @@ namespace Menu
         }
         public void StartNewGame()
         {
-            SceneManager.LoadScene("FirstScene");
+            SceneManager.LoadScene(1);
         }
 
         public void QuitGame()

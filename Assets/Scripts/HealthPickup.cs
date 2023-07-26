@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class HealthPickup : MonoBehaviour
 {
+    public AudioClip healSound;
     public int healthRestore = 20;
     public Vector3 spinRotationSpeed = new Vector3(0,180,0);
 
@@ -19,6 +20,7 @@ public class HealthPickup : MonoBehaviour
         if(damageable)
         {
             damageable.Heal(healthRestore);
+            SoundManager.Instance.PlaySound(healSound);
             Destroy(gameObject);
         }    
     }
