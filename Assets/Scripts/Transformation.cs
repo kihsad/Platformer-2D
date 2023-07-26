@@ -27,8 +27,9 @@ public class Transformation : MonoBehaviour
     private void Awake()
     {
         currentSkin = _skin1;
+        _skin2.SetActive(false);
         currentPosition = transform.position;
-        LoadDefaultSkin(currentPosition);
+        //LoadDefaultSkin(currentPosition);
     }
 
     public void ChangeSkin()
@@ -51,14 +52,14 @@ public class Transformation : MonoBehaviour
     {
         currentSkin = _skin1;
         currentSkin.SetActive(true);
-        //currentSkin = Instantiate(_skin1, transform);
+        currentSkin = Instantiate(_skin1, transform);
         currentSkin.transform.position = position;
     }
     private void LoadNewSkin(Vector3 position)
     {
         currentSkin = _skin2;
         currentSkin.SetActive(true);
-        //currentSkin = Instantiate(_skin2, transform);
+        currentSkin = Instantiate(_skin2, transform);
         currentSkin.transform.position = position;
     }
     private void DestroyCurrentSkin()
