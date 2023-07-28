@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(Rigidbody2D), typeof(TouchingDirections), typeof(Damageable))]
 public class PlayerControl : MonoBehaviour
@@ -18,6 +19,9 @@ public class PlayerControl : MonoBehaviour
     private Text _levelText;
     [SerializeField]
     private GameObject _abilityPanel;
+    [SerializeField]
+    private Text _healthText;
+
 
     public AudioClip movement;
 
@@ -127,6 +131,11 @@ public class PlayerControl : MonoBehaviour
             SoundManager.Instance.PlaySound(movement);
             _timer = 0;
         }
+        if (!_damageable.IsAlive)
+        {
+            SceneManager.LoadScene(5);
+        }
+        _healthText.text = _damageable.Health.ToString();
     }
 
     public void GainXP(int xp)
@@ -270,6 +279,7 @@ public class PlayerControl : MonoBehaviour
     {
         if (context.started && canUseAbilities)
         {
+            _attack.Damage = _damage * 4;
             _transformation.ChangeSkin();
         }
     }
