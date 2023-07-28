@@ -100,9 +100,9 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Pause"",
+                    ""name"": ""Dash"",
                     ""type"": ""Button"",
-                    ""id"": ""5f6e580c-1989-40cd-a66c-18f4cc9d3e4a"",
+                    ""id"": ""4bf39442-0b86-4a7f-9806-4ee005760c98"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -332,17 +332,6 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""de4836c2-6080-4059-94a5-89fbbfeee230"",
-                    ""path"": ""<Keyboard>/1"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""Attack"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""fc85bdf1-bdb3-40d8-934f-d08648cbd7b2"",
                     ""path"": ""<Keyboard>/space"",
                     ""interactions"": """",
@@ -398,12 +387,12 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""1efce165-4fcb-4a0b-ab1a-5392f3027a1f"",
-                    ""path"": ""<Keyboard>/escape"",
+                    ""id"": ""c55d10fa-719b-4eee-bfe8-b8b9785fe574"",
+                    ""path"": ""<Keyboard>/1"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""Pause"",
+                    ""action"": ""Dash"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -999,7 +988,7 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         m_Player_StrongAttack = m_Player.FindAction("StrongAttack", throwIfNotFound: true);
         m_Player_Block = m_Player.FindAction("Block", throwIfNotFound: true);
         m_Player_Transformation = m_Player.FindAction("Transformation", throwIfNotFound: true);
-        m_Player_Pause = m_Player.FindAction("Pause", throwIfNotFound: true);
+        m_Player_Dash = m_Player.FindAction("Dash", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1079,7 +1068,7 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_StrongAttack;
     private readonly InputAction m_Player_Block;
     private readonly InputAction m_Player_Transformation;
-    private readonly InputAction m_Player_Pause;
+    private readonly InputAction m_Player_Dash;
     public struct PlayerActions
     {
         private @PlayerInputActions m_Wrapper;
@@ -1092,7 +1081,7 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         public InputAction @StrongAttack => m_Wrapper.m_Player_StrongAttack;
         public InputAction @Block => m_Wrapper.m_Player_Block;
         public InputAction @Transformation => m_Wrapper.m_Player_Transformation;
-        public InputAction @Pause => m_Wrapper.m_Player_Pause;
+        public InputAction @Dash => m_Wrapper.m_Player_Dash;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1126,9 +1115,9 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                 @Transformation.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnTransformation;
                 @Transformation.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnTransformation;
                 @Transformation.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnTransformation;
-                @Pause.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPause;
-                @Pause.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPause;
-                @Pause.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPause;
+                @Dash.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDash;
+                @Dash.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDash;
+                @Dash.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDash;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -1157,9 +1146,9 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                 @Transformation.started += instance.OnTransformation;
                 @Transformation.performed += instance.OnTransformation;
                 @Transformation.canceled += instance.OnTransformation;
-                @Pause.started += instance.OnPause;
-                @Pause.performed += instance.OnPause;
-                @Pause.canceled += instance.OnPause;
+                @Dash.started += instance.OnDash;
+                @Dash.performed += instance.OnDash;
+                @Dash.canceled += instance.OnDash;
             }
         }
     }
@@ -1324,7 +1313,7 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         void OnStrongAttack(InputAction.CallbackContext context);
         void OnBlock(InputAction.CallbackContext context);
         void OnTransformation(InputAction.CallbackContext context);
-        void OnPause(InputAction.CallbackContext context);
+        void OnDash(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

@@ -75,7 +75,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c0f5ac98dc904d43bdb99e00a746c7b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackDamage: 15
+  attackDamage: 20
 --- !u!1 &7821598609304324305
 GameObject:
   m_ObjectHideFlags: 0
@@ -132,6 +132,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9043369245924533399}
   - component: {fileID: 9179255766923967169}
+  - component: {fileID: 2657227233417173590}
   m_Layer: 7
   m_Name: Weapon-Sword
   m_TagString: Untagged
@@ -207,6 +208,18 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &2657227233417173590
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9048504791362436703}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef64a97ad378d1f42bb6c13c477a3b44, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &9048994868061323823
 GameObject:
   m_ObjectHideFlags: 0
@@ -441,10 +454,10 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9049281290219884681}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: -1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 9043384851677823477}
   - {fileID: 9043535360598789637}
@@ -489,7 +502,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 2
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
@@ -541,7 +554,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 2.125, y: 2.75}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 0
@@ -695,7 +708,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
     m_ActionId: ca8efe8c-ab18-4b33-8504-27d2bc49698f
-    m_ActionName: Player/StrongAttack[/Keyboard/2]
+    m_ActionName: Player/StrongAttack[/Keyboard/a]
   - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2641560919064192407}
@@ -711,11 +724,39 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
     m_ActionId: d1112045-70ef-41de-bcc9-e78d12ee13b0
-    m_ActionName: Player/Block[/Keyboard/3]
+    m_ActionName: Player/Block[/Keyboard/s]
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2641560919064192407}
+        m_TargetAssemblyTypeName: PlayerControl, Assembly-CSharp
+        m_MethodName: OnChangeSkin
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: 33d3cad3-c3d1-474a-88a3-86645814c417
-    m_ActionName: Player/Transformation[/Keyboard/4]
+    m_ActionName: Player/Transformation[/Keyboard/d]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2641560919064192407}
+        m_TargetAssemblyTypeName: PlayerControl, Assembly-CSharp
+        m_MethodName: OnDash
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 4bf39442-0b86-4a7f-9806-4ee005760c98
+    m_ActionName: Player/Dash[/Keyboard/1]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -738,10 +779,15 @@ MonoBehaviour:
   _maxXp: 100
   _level: 1
   _levelText: {fileID: 0}
+  _abilityPanel: {fileID: 0}
+  movement: {fileID: 8300000, guid: d5b0e050dc63ad24096b7bc4e26abb2e, type: 3}
   walkSpeed: 5
   projectilePrefab: {fileID: 2786701020119531961, guid: d7f607b2f693b0f4b9cfa737d9ff1f55, type: 3}
   jumpImpulse: 6
-  dashForce: 0
+  dashForce: 30
+  dingSound: {fileID: 8300000, guid: f1ac5abbebbcfd846bf7058e9cdf138c, type: 3}
+  meleeAttackSound: {fileID: 8300000, guid: a16a3bba9822624438ae83478f742dde, type: 3}
+  rangedAttackSound: {fileID: 8300000, guid: edb353cffe5858d4caa892d942bfff75, type: 3}
 --- !u!70 &5476082666764528260
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -833,8 +879,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4fcd5487eb3430141977b52c1ac836b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _skin1: {fileID: 9049341510330799709}
-  _skin2: {fileID: 0}
   lifeTime: 5
 --- !u!1 &9049341510330799709
 GameObject:
@@ -1016,6 +1060,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9051700577689256899}
   - component: {fileID: 9178446944980804871}
+  - component: {fileID: 196133685973638487}
   m_Layer: 7
   m_Name: Hat-Helmet
   m_TagString: Untagged
@@ -1090,6 +1135,18 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &196133685973638487
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9049793890702171651}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef64a97ad378d1f42bb6c13c477a3b44, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &3384117027394878046
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -38,7 +38,6 @@ public class PlayerControl : MonoBehaviour
     public float dashForce;
     private int _damage;
 
-    private bool canDash;
     private bool canUseAbilities;
    
 
@@ -186,7 +185,7 @@ public class PlayerControl : MonoBehaviour
 
     public void OnJump(InputAction.CallbackContext context)
     {
-        canDash = true;
+        
         if (context.performed && _touchingDirections.IsGrounded)
         {
             _animator.SetTrigger(AnimationStrings.jumpTrigger);
@@ -202,7 +201,6 @@ public class PlayerControl : MonoBehaviour
 
         if (_touchingDirections.IsGrounded) _currentJumps = 1;
         if (_currentJumps >= maxJumps) return;
-        canDash = false;
     }
     public void OnAttack(InputAction.CallbackContext contex)
     {
@@ -238,14 +236,16 @@ public class PlayerControl : MonoBehaviour
         }
     }
 
-    public void OnDash(/*InputAction.CallbackContext context*/)
+    public void OnDash()
     {
-        if (/*context.started && *//*!_touchingDirections.IsGrounded*/ canDash && canUseAbilities)
+        if (!_touchingDirections.IsGrounded && canUseAbilities)
         {
             Debug.Log("start dash");
             if (IsFacingRight)
             {
-                _rb.AddForce(Vector2.right * dashForce);
+                var newRight = new Vector2(transform.position.x + 2, transform.position.y);
+                transform.position = Vector2.Lerp(transform.position, newRight, 0.3f);
+                //_rb.AddForce(Vector2.right * dashForce);
                 //float origGravity = _rb.gravityScale;
                 //_rb.gravityScale = 0f;
                 //_rb.velocity = Vector2.right * dashForce;
@@ -254,7 +254,9 @@ public class PlayerControl : MonoBehaviour
             }
             else
             {
-                _rb.AddForce(Vector2.left * dashForce);
+                var newLeft = new Vector2(transform.position.x -2, transform.position.y);
+                transform.position = Vector2.Lerp(transform.position, newLeft, 0.3f);
+                //_rb.AddForce(Vector2.left * dashForce);
                 //float origGravity = _rb.gravityScale;
                 //_rb.gravityScale = 0f;
                 //_rb.velocity = Vector2.left * dashForce;
